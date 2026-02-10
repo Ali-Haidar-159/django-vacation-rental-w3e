@@ -143,12 +143,8 @@ Port: 5432
 
 ```bash
 # Clone the repository
-git clone <your-repository-url>
-cd vacation_rental
-
-# Or if starting fresh, create the project directory
-mkdir vacation_rental
-cd vacation_rental
+git clone <repository-url>
+cd django-vacation-rental-w3e
 ```
 
 ### Step 2: Set Up PostgreSQL Database
@@ -169,27 +165,6 @@ docker run --name postgres-vacation \
 
 # Verify container is running
 docker ps
-```
-
-#### Option B: Local PostgreSQL Installation
-
-```bash
-# Install PostgreSQL (Ubuntu/Debian)
-sudo apt update
-sudo apt install postgresql postgresql-contrib
-
-# Start PostgreSQL service
-sudo systemctl start postgresql
-sudo systemctl enable postgresql
-
-# Create database and user
-sudo -u postgres psql
-
-# In PostgreSQL prompt:
-CREATE DATABASE pythondb;
-CREATE USER postgres WITH PASSWORD 'postgres';
-GRANT ALL PRIVILEGES ON DATABASE pythondb TO postgres;
-\q
 ```
 
 ### Step 3: Create Python Virtual Environment
@@ -223,21 +198,7 @@ psycopg2-binary==2.9.9
 Pillow==10.1.0
 ```
 
-### Step 5: Configure Django Project
-
-If you're using the setup script, skip to Step 6. Otherwise, manually configure:
-
-```bash
-# Create Django project
-django-admin startproject config .
-
-# Create Django app
-python manage.py startapp properties
-```
-
-Copy the provided model files, views, URLs, templates, and settings from the setup script.
-
-### Step 6: Run Database Migrations
+### Step 5: Run Database Migrations
 
 ```bash
 # Create migration files
@@ -247,7 +208,7 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
-### Step 7: Create Superuser for Admin Access
+### Step 6: Create Superuser for Admin Access
 
 **IMPORTANT**: The setup script's automatic superuser creation may not work. You must create the superuser manually.
 
@@ -301,20 +262,38 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 
 ---
 
-## Running the Application
+## Run the Application quickly
 
-### Start the Development Server
-
+# 1. Clone the project
 ```bash
-# Ensure you're in the project directory
+git clone <-repo-url>
+cd vacation_rental
+```
 
-# Then activate virtual environment
-source venv/bin/activate  # Linux/Mac
+# 2. Docker PostgreSQL run 
+```bash
+docker run --name postgres-vacation \
+  -e POSTGRES_PASSWORD=postgres \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_DB=pythondb \
+  -p 5432:5432 -d postgres:latest
+```
 
-# Run development server
+# 3. Database backup import 
+```bash
+./import_database.sh
+```
+
+# 4. Python setup 
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+# 5. Server 
+```bash
 python manage.py runserver
-
-# Server will start at: http://127.0.0.1:8000/
 ```
 
 ### Access the Application
@@ -431,7 +410,7 @@ source venv/bin/activate
 python manage.py import_properties property.csv
 
 # Or import from any other location with full path
-python manage.py import_properties /path/to/your/file.csv
+python manage.py import_properties /path/to/your/property.csv
 ```
 
 #### Import Process
