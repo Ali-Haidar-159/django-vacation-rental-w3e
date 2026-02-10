@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}Search Results - Vacation Rentals{% endblock %}
+
+{% block content %}
+<div class="search-bar">
+    <form action="{% url 'properties:search_results' %}" method="get">
+        <div style="position: relative; flex: 1;">
+            <input type="text" name="location" id="location-search" value="{{ search_query }}" placeholder="Search by location..." autocomplete="off">
+            <div id="autocomplete-results" class="autocomplete-suggestions"></div>
+        </div>
+        <button type="submit">Search</button>
+    </form>
+</div>
+
+<h2 style="margin-bottom: 1rem;">Search Results for "{{ search_query }}"</h2>
+
+{% if page_obj %}
+<div class="property-grid">
+    {% for property in page_obj %}
+    <a href="{% url 'properties:property_detail' property.pk %}" class="property-card">
+        {% if property.images.first %}
+        <img src="{{ property.images.first.image.url }}" alt="{{ property.name }}">
+        {% else %}
+        <img src="https://via.placeholder.com/300x200?text=No+Image" alt="{{ property.name }}">
+        {% endif %}
+        <div class="property-card-body">
+            <h3>{{ property.name }}</h3>
+            <p>{{ property.location }}</p>
+            <p>{{ property.bedrooms }} bed • {{ property.bathrooms }} bath • {{ property.max_guests }} guests</p>
+            <p class="price">${{ property.price_per_night }} / night</p>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+
+<div class="pagination">
+    {% if page_obj.has_previous %}
+    <a href="?location={{ search_query }}&page=1">First</a>
+    <a href="?location={{ search_query }}&page={{ page_obj.previous_page_number }}">Previous</a>
+    {% endif %}
+    
+    <span class="current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    
+    {% if page_obj.has_next %}
+    <a href="?location={{ search_query }}&page={{ page_obj.next_page_number }}">Next</a>
+    <a href="?location={{ search_query }}&page={{ page_obj.paginator.num_pages }}">Last</a>
+    {% endif %}
+</div>
+{% else %}
+<div class="no-results">
+    <h2>No properties found</h2>
+    <p>No properties found matching "{{ search_query }}". Try a different location.</p>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const searchInput = document.getElementById('location-search');
+const resultsDiv = document.getElementById('autocomplete-results');
+
+let debounceTimer;
+
+searchInput.addEventListener('input', function() {
+    clearTimeout(debounceTimer);
+    const query = this.value;
+    
+    if (query.length < 2) {
+        resultsDiv.style.display = 'none';
+        return;
+    }
+    
+    debounceTimer = setTimeout(function() {
+        fetch(`/api/locations/?query=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(data => {
+                resultsDiv.innerHTML = '';
+                
+                if (data.locations && data.locations.length > 0) {
+                    data.locations.forEach(location => {
+                        const div = document.createElement('div');
+                        div.className = 'autocomplete-suggestion';
+                        div.textContent = location.display;
+                        div.addEventListener('click', function() {
+                            searchInput.value = location.city;
+                            resultsDiv.style.display = 'none';
+                        });
+                        resultsDiv.appendChild(div);
+                    });
+                    resultsDiv.style.display = 'block';
+                } else {
+                    resultsDiv.style.display = 'none';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                resultsDiv.style.display = 'none';
+            });
+    }, 300);
+});
+
+document.addEventListener('click', function(e) {
+    if (!searchInput.contains(e.target) && !resultsDiv.contains(e.target)) {
+        resultsDiv.style.display = 'none';
+    }
+});
+</script>
+{% endblock %}

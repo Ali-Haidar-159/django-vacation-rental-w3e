@@ -1,0 +1,6 @@
+name,description,property_type,bedrooms,bathrooms,max_guests,price_per_night,city,state,country,address,zip_code,image_urls
+Sunny Beach Villa,Beautiful beachfront villa with stunning ocean views,villa,4,3,8,350.00,Miami,Florida,USA,123 Ocean Drive,33139,https://via.placeholder.com/800x600?text=Beach+Villa+1|https://via.placeholder.com/800x600?text=Beach+Villa+2
+Mountain Retreat,Cozy cabin in the mountains perfect for winter getaways,cabin,2,1,4,150.00,Aspen,Colorado,USA,456 Mountain Road,81611,https://via.placeholder.com/800x600?text=Mountain+Cabin
+Downtown Apartment,Modern apartment in the heart of the city,apartment,1,1,2,120.00,New York,New York,USA,789 5th Avenue,10001,https://via.placeholder.com/800x600?text=City+Apartment
+Lake House Paradise,Spacious house on the lake with private dock,house,5,4,10,450.00,Lake Tahoe,California,USA,321 Lakeshore Blvd,96150,https://via.placeholder.com/800x600?text=Lake+House+1|https://via.placeholder.com/800x600?text=Lake+House+2
+Historic Cottage,Charming cottage in a quiet neighborhood,cottage,2,1,4,100.00,Charleston,South Carolina,USA,654 Historic Lane,29401,https://via.placeholder.com/800x600?text=Cottage
