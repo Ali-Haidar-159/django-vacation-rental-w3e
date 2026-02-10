@@ -149,8 +149,6 @@ cd django-vacation-rental-w3e
 
 ### Step 2: Set Up PostgreSQL Database
 
-#### Option A: Using Docker (Recommended)
-
 ```bash
 # Pull PostgreSQL image
 docker pull postgres:latest
@@ -264,13 +262,13 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 
 ## Run the Application quickly
 
-# 1. Clone the project
+### 1. Clone the project
 ```bash
 git clone <-repo-url>
 cd vacation_rental
 ```
 
-# 2. Docker PostgreSQL run 
+### 2. Docker PostgreSQL run 
 ```bash
 docker run --name postgres-vacation \
   -e POSTGRES_PASSWORD=postgres \
@@ -279,19 +277,19 @@ docker run --name postgres-vacation \
   -p 5432:5432 -d postgres:latest
 ```
 
-# 3. Database backup import 
+### 3. Database backup import 
 ```bash
 ./import_database.sh
 ```
 
-# 4. Python setup 
+### 4. Python setup 
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-# 5. Server 
+### 5. Server 
 ```bash
 python manage.py runserver
 ```
