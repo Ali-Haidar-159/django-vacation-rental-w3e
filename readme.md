@@ -279,6 +279,7 @@ docker run --name postgres-vacation \
 
 ### 3. Database backup import 
 ```bash
+chmod +x import_database.sh
 ./import_database.sh
 ```
 
